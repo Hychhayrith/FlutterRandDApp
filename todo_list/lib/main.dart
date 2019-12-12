@@ -1,116 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/pages.dart';
+import './screens/UIUX/UIUX.dart';
 
-void main() => runApp(new TodoApp());
+void main() => runApp(new MyApp());
 
-class TodoApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return new MaterialApp(
-      title: 'To Do App',
-      home: new TodoList(),
-    );
+  State<StatefulWidget> createState() {
+    return RandD();
   }
 }
 
-// Create a Stateful Widget
-class TodoList extends StatefulWidget {
+class RandD extends State<MyApp> {
+  int _currentIndex = 0;
+  final List<Widget> _children = [UIUX(), ExplorePage(), PastTripsPage()];
+
   @override
-  createState() => new TodoListState();
-}
-
-class TodoListState extends State<TodoList> {
-  List<String> _todoItems = [];
-
-  void _addTodoItem(String task) {
-    if (task.length > 0) {
-      setState(() => _todoItems.add(task));
-    }
-  }
-
-  void _pushAddTodoScreen() {
-    Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
-      return new Scaffold(
-          appBar: new AppBar(
-            title: new Text('Add a new Task'),
-          ),
-          body: new TextField(
-            autofocus: true,
-            onSubmitted: (val) {
-              _addTodoItem(val);
-
-              Navigator.pop(context);
-            },
-            decoration: new InputDecoration(
-                hintText: 'Enter something to do...',
-                contentPadding: const EdgeInsets.all(16.0)),
-          ));
-    }));
-  }
-
-  void _removeTodoItem(int index) {
-    setState(() {
-      _todoItems.removeAt(index);
-    });
-  }
-
-  void _promptDeleteItem(int index) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return new AlertDialog(
-            title: new Text('Mark ' + _todoItems[index] + ' as done?'),
-            actions: <Widget>[
-              new FlatButton(
-                  child: new Text('CANCEL'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }),
-              new FlatButton(
-                child: new Text('MARK AS DONE'),
-                onPressed: () {
-                  _removeTodoItem(index);
-
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
-        });
-  }
-
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new MaterialApp(
-      title: 'To Do List',
       home: new Scaffold(
         appBar: new AppBar(
-          title: new Text('To Do List New'),
+          title: new Text('Flutter R & D'),
         ),
-        body: _buildTodoList(),
-        floatingActionButton: new FloatingActionButton(
-          onPressed: _pushAddTodoScreen,
-          tooltip: 'Add task',
-          child: new Icon(Icons.add),
+        body: _children[_currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: _onTabTapped,
+          currentIndex: _currentIndex,
+          items: [
+            BottomNavigationBarItem(
+              icon: new Image.network(
+                'https://res.cloudinary.com/dd8plasfr/image/upload/v1575793384/RNRandDAppImage/browser_1_dmluyw.png',
+                width: 25,
+                height: 25,
+              ),
+              title: new Text('UI & UX'),
+            ),
+            BottomNavigationBarItem(
+              icon: new Image.network(
+                'https://res.cloudinary.com/dd8plasfr/image/upload/v1575793384/RNRandDAppImage/browser_1_dmluyw.png',
+                width: 25,
+                height: 25,
+              ),
+              title: new Text('Component'),
+            ),
+            BottomNavigationBarItem(
+              icon: new Image.network(
+                'https://res.cloudinary.com/dd8plasfr/image/upload/v1575793384/RNRandDAppImage/browser_1_dmluyw.png',
+                width: 25,
+                height: 25,
+              ),
+              title: new Text('Firebase'),
+            )
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildTodoList() {
-    return new ListView.builder(
-      itemBuilder: (context, index) {
-        if (index < _todoItems.length) {
-          return _buildTodoItem(_todoItems[index], index);
-        }
-      },
-    );
-  }
-
-  Widget _buildTodoItem(String todoText, int index) {
-    return new ListTile(
-      title: new Text(todoText),
-      onTap: () => _promptDeleteItem(index),
-    );
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
   }
 }
