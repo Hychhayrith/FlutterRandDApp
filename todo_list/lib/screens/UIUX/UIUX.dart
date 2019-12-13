@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../TodoList/TodoList.dart';
+import './TodoList/TodoList.dart';
+import './YouTube/YouTube.dart';
 
 class UIUX extends StatelessWidget {
   List _screens = [
@@ -10,7 +11,7 @@ class UIUX extends StatelessWidget {
     ],
     [
       "YouTube",
-      new TodoList(),
+      new YouTube(),
       'https://res.cloudinary.com/dd8plasfr/image/upload/v1576160165/FlutterRandD/youtube_1_tos7or.png'
     ],
     [
